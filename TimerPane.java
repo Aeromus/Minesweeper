@@ -5,11 +5,11 @@ import java.util.TimerTask;
 /**
  * Created by Andrew Knoblach on 12/8/2016.
  */
-public class TimerPane {
+ class TimerPane {
 
     private Timer timer = new Timer();
 
-    public void incrementTime(){
+    private void incrementTime(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -19,11 +19,11 @@ public class TimerPane {
     }
 
 
-    public void startTimer(){
+     void startTimer(){
         incrementTime();
     }
 
-    public void stop(){
+     void stop(){
         timer.cancel();
     }
 }

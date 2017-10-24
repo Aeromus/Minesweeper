@@ -18,25 +18,23 @@ import static MineSweeper.BombType.*;
 /**
  * Created by Andrew on 12/5/2016.
  */
-public class Tile extends StackPane{
+ class Tile extends StackPane{
 
-
+    //Private Variables
     private static final int TILE_SIZE = 25;
-
-    public int x, y;
-    public boolean bomb;
-    public boolean revealed = false;
-    public static Tile[][] grid;
+    private int x, y;
+    private boolean revealed = false;
     private int xTile;
     private int yTile;
-
     private Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
-    public Text text = new Text();
-    public Text flag  = new Text();
-    public Text qBomb  =  new Text();
+    private Text flag  = new Text();
+    private Text qBomb  =  new Text();
+    private BombType bT;
 
-    public BombType bT;
-
+    //Unprotected Variables
+    Text text = new Text();
+    boolean bomb;
+    static Tile[][] grid;
 
     public Tile(int x, int y, boolean bomb){
 
@@ -96,8 +94,7 @@ public class Tile extends StackPane{
                 else {
                     if(bT== Norm)
                         open();
-                    if(bT == gameOver)
-                        return;
+
                 }
 
             }
@@ -160,7 +157,9 @@ public class Tile extends StackPane{
         int[] points = new int[]{
             -1, -1,-1, 0, -1, 1, 0, -1, 0, 1, 1, -1, 1, 0, 1, 1
         };
-        this.grid = grid;
+
+       // this.grid = grid;
+
         this.xTile = xTile;
         this.yTile = yTile;
         for (int i= 0; i < points.length; i++){
@@ -188,21 +187,23 @@ public class Tile extends StackPane{
             Source.timer.stop();
         for(int i = 0; i < grid.length; i++)
             for(int j = 0; j < grid.length; j++)
-                if (grid[i][j].bomb == true && grid[i][j].bT == Norm) {
+                if (grid[i][j].bomb && grid[i][j].bT == Norm) {
                     grid[i][j].border.setFill(Color.RED);
                     grid[i][j].text.setVisible(true);
                     grid[i][j].revealed = true;
 
-                } else if (grid[i][j].bomb == false && grid[i][j].bT == Flag) {
+                }
+                else if (!grid[i][j].bomb && grid[i][j].bT == Flag) {
                     grid[i][j].border.setFill(Color.YELLOW);
                     grid[i][j].text.setVisible(true);
                     grid[i][j].revealed = true;
                     grid[i][j].flag.setVisible(false);
-                } else if (grid[i][j].bomb == true && grid[i][j].bT == Flag) {
+                }
+                else if (grid[i][j].bomb && grid[i][j].bT == Flag) {
                     grid[i][j].border.setFill(Color.LIGHTGREEN);
                     grid[i][j].revealed = true;
                 }
-                else if (grid[i][j].bomb == false){
+                else if (!grid[i][j].bomb){
                     grid[i][j].bT = gameOver;
                 }
 
