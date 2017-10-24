@@ -5,6 +5,6 @@ package MineSweeper;
  */
 public enum  BombType {
 
-    Flag, Unknown, Norm;
+    Flag, Unknown, Norm, gameOver
 
 }

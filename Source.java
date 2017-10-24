@@ -72,7 +72,7 @@ public class Source extends Application {
         Tile.grid = grid;
         bombCount.setText("Bombs Left: " + numOfBombs);
         winTiles = (X_TILES* Y_TILES) - numOfBombs;
-        System.out.println(winTiles);
+        //System.out.println(winTiles);
         return root;
     }
 

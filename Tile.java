@@ -13,9 +13,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import static MineSweeper.BombType.Flag;
-import static MineSweeper.BombType.Norm;
-import static MineSweeper.BombType.Unknown;
+import static MineSweeper.BombType.*;
 
 /**
  * Created by Andrew on 12/5/2016.
@@ -23,7 +21,7 @@ import static MineSweeper.BombType.Unknown;
 public class Tile extends StackPane{
 
 
-    public static final int TILE_SIZE = 25;
+    private static final int TILE_SIZE = 25;
 
     public int x, y;
     public boolean bomb;
@@ -65,7 +63,7 @@ public class Tile extends StackPane{
             @Override
             public void handle(MouseEvent event) {
                 if(event.getButton() == MouseButton.SECONDARY){
-                    if(bT == Norm && revealed != true) {
+                    if(bT == Norm && !revealed) {
                         border.setFill(Color.BLUE);
                         bT = Flag;
                         flag.setVisible(true);
@@ -94,9 +92,12 @@ public class Tile extends StackPane{
                 }
 
                 //setOnMouseClicked(e -> open());
+
                 else {
                     if(bT== Norm)
                         open();
+                    if(bT == gameOver)
+                        return;
                 }
 
             }
@@ -105,11 +106,11 @@ public class Tile extends StackPane{
     }
 
 
-    public void open() {
+    private void open() {
 
-        if (revealed == true) return;
+        if (revealed) return;
 
-        if (bomb == true) {
+        if (bomb) {
             //Game over End timer, score
             border.setFill(Color.RED);
             text.setVisible(true);
@@ -135,11 +136,11 @@ public class Tile extends StackPane{
             int bombsLeft = Source.winTiles;
             for(int i = 0; i < grid.length; i++) {
                 for (int j = 0; j < grid.length; j++)
-                    if (grid[i][j].bomb == false && grid[i][j].revealed == true) {
+                    if (!grid[i][j].bomb && grid[i][j].revealed) {
                         bombsLeft--;
                     }
             }
-            System.out.println(Source.winTiles);
+           //System.out.println(Source.winTiles);
                 if (0 == bombsLeft){
                     Source.timer.stop();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,30 +184,27 @@ public class Tile extends StackPane{
     }
 
     //Works
-    public void revealBombs(){
+    private void revealBombs(){
             Source.timer.stop();
         for(int i = 0; i < grid.length; i++)
             for(int j = 0; j < grid.length; j++)
-            {
-                if(grid[i][j].bomb == true && grid[i][j].bT == Norm){
+                if (grid[i][j].bomb == true && grid[i][j].bT == Norm) {
                     grid[i][j].border.setFill(Color.RED);
                     grid[i][j].text.setVisible(true);
                     grid[i][j].revealed = true;
 
-                }
-
-                else if(grid[i][j].bomb == false && grid[i][j].bT == Flag){
+                } else if (grid[i][j].bomb == false && grid[i][j].bT == Flag) {
                     grid[i][j].border.setFill(Color.YELLOW);
                     grid[i][j].text.setVisible(true);
                     grid[i][j].revealed = true;
                     grid[i][j].flag.setVisible(false);
-                }
-
-                else if(grid[i][j].bomb == true && grid[i][j].bT == Flag){
+                } else if (grid[i][j].bomb == true && grid[i][j].bT == Flag) {
                     grid[i][j].border.setFill(Color.LIGHTGREEN);
                     grid[i][j].revealed = true;
                 }
-            }
+                else if (grid[i][j].bomb == false){
+                    grid[i][j].bT = gameOver;
+                }
 
     }
 }
